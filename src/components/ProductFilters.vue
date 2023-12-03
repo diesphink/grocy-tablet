@@ -1,22 +1,11 @@
 <template>
   <form action="./" method="get" autocomplete="off" novalidate="true">
-    <div class="subheader mb-2">Category</div>
+    <div class="subheader mb-2" v-if="store.product_groups">Product Groups</div>
     <div class="list-group list-group-transparent mb-3">
-      <a class="list-group-item list-group-item-action d-flex align-items-center active" href="#">
-        Games
-        <small class="text-secondary ms-auto">24</small>
-      </a>
-      <a class="list-group-item list-group-item-action d-flex align-items-center" href="#">
-        Clothing
-        <small class="text-secondary ms-auto">149</small>
-      </a>
-      <a class="list-group-item list-group-item-action d-flex align-items-center" href="#">
-        Jewelery
-        <small class="text-secondary ms-auto">88</small>
-      </a>
-      <a class="list-group-item list-group-item-action d-flex align-items-center" href="#">
-        Toys
-        <small class="text-secondary ms-auto">54</small>
+
+      <a class="list-group-item list-group-item-action d-flex align-items-center" href="#" v-for="pg in store.product_groups" :key="pg.id">
+        {{pg.name}}
+        <small class="text-secondary ms-auto">{{ pg.count }}</small>
       </a>
     </div>
     <div class="subheader mb-2">Tags</div>
@@ -49,3 +38,14 @@
     </div>
   </form>
 </template>
+
+<script setup>
+import { onMounted } from "vue";
+import { useGrocyStore } from "../stores/grocy.js";
+const store = useGrocyStore();
+
+onMounted(() => {
+  store.fetch();
+  
+});
+</script>
