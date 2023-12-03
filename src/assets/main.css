@@ -1,35 +1,24 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+.validade {
+  font-size: 0.5rem;
+  margin-top: 30px;
+  letter-spacing: -0.05em !important;
+  padding: 2px;
+  opacity: 0.9;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
+.quantidade {
+  background-color: white !important;
+  border: solid rgba(0, 0, 0, 0.2) 1px !important;
+  opacity: 0.9;
+  color: black !important;
+  margin-top: -5px;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.produto .card-body {
+  font-size: 0.8rem;
+  padding: 5px 10px !important;
+        /* max-height: 3.5em; */
+        /* text-overflow: ellipsis; */
+        /* word-wrap: break-word; */
+        /* overflow: hidden; */
 }

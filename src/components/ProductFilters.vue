@@ -1,6 +1,6 @@
 <template>
   <form action="./" method="get" autocomplete="off" novalidate="true">
-    <div class="subheader mb-2" v-if="store.product_groups">Product Groups</div>
+    <div class="subheader mb-2" v-if="store.product_groups">Grupos</div>
     <div class="list-group list-group-transparent mb-3">
 
       <a class="list-group-item list-group-item-action d-flex align-items-center" href="#" v-for="pg in store.product_groups" :key="pg.id">
@@ -34,7 +34,7 @@
       </label>
     </div>
     <div class="mt-5">
-      <button class="btn btn-primary w-100 disabled">Reset filters</button>
+      <button class="btn btn-primary w-100 disabled">Limpar filtros</button>
     </div>
   </form>
 </template>
