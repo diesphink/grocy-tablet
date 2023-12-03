@@ -1,4 +1,9 @@
-import './assets/main.css'
+// import './assets/main.css'
+
+import "@tabler/core/dist/js/tabler.min.js";
+import "@tabler/core/dist/css/tabler.min.css";
+import "@tabler/core/dist/css/tabler-flags.min.css";
+
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
