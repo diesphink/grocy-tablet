@@ -5,7 +5,8 @@ export const useGrocyStore = defineStore('grocy', {
   state: () => ({
     _product_groups: [],
     _products: [],
-    _stocks: []
+    _stocks: [],
+    _locations: []
   }),
   getters: {
     product_groups: (state) => {
@@ -36,13 +37,23 @@ export const useGrocyStore = defineStore('grocy', {
           picture_file_name: product.picture_file_name
         }
       })
+    },
+    locations: (state) => {
+      return state._locations.map((location) => {
+        return {
+          name: location.name,
+          id: location.id,
+        }
+      })
     }
+
   },
   actions: {
     fetch() {
       this.fetchProductGroups()
       this.fetchProcuts()
       this.fetchStocks()
+      this.fetchLocations()
     },
     fetchProductGroups() {
       fetch(
@@ -69,6 +80,15 @@ export const useGrocyStore = defineStore('grocy', {
         .then((response) => response.json())
         .then((data) => {
           this._stocks = data
+        })
+    },
+    fetchLocations() {
+      fetch(
+        'http://192.168.15.2:9283/api/objects/locations?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this._locations = data
         })
     }
   }

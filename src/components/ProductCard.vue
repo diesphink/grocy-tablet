@@ -12,7 +12,6 @@ const expired = computed(() => daysToExpire < 0)
 const exp_now = !expired.value && computed(() => daysToExpire < 7)
 const expiring = !expired.value && !exp_now.value && computed(() => daysToExpire < 30)
 var prod_image = ''
-console.log(props.product.picture_file_name)
 if (props.product.picture_file_name == null) {
   prod_image = `http://192.168.15.2:9283/api/files/productpictures/${btoa(
     'zckt669zxvh37ydjp9qffvgkml9oy5h0b71.jpg'

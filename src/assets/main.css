@@ -17,8 +17,12 @@
 .produto .card-body {
   font-size: 0.8rem;
   padding: 5px 10px !important;
-        /* max-height: 3.5em; */
-        /* text-overflow: ellipsis; */
-        /* word-wrap: break-word; */
-        /* overflow: hidden; */
+}
+
+* {
+  touch-action: manipulation;
+}
+
+.filtros .accordion-body {
+  padding: 5px;
 }

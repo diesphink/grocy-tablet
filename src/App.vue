@@ -1,6 +1,18 @@
 <script setup>
+import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import TopMenu from './components/TopMenu.vue'
+
+import { useGrocyStore } from './stores/grocy.js'
+
+const store = useGrocyStore()
+
+
+onMounted(() => {
+  store.fetch()
+})
+
+
 </script>
 
 <template>
