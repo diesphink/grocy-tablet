@@ -1,0 +1,6 @@
+{
+  "name": "Grocy - Tablet",
+  "short_name": "Grocy",
+  "start_url": "http://192.168.15.11:5173",
+  "display": "standalone"
+}
