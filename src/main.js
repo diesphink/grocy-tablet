@@ -1,10 +1,9 @@
+import '@tabler/core/dist/js/tabler.min.js'
+import '@tabler/core/dist/css/tabler.min.css'
+import '@tabler/core/dist/css/tabler-flags.min.css'
+import 'moment/min/moment-with-locales.min.js'
+
 import './assets/main.css'
-
-import "@tabler/core/dist/js/tabler.min.js";
-import "@tabler/core/dist/css/tabler.min.css";
-import "@tabler/core/dist/css/tabler-flags.min.css";
-import "moment/min/moment-with-locales.min.js";
-
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -21,6 +20,6 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.provide("moment", moment);
+app.provide('moment', moment)
 
 app.mount('#app')

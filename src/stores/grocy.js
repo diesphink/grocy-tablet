@@ -10,7 +10,7 @@ export const useGrocyStore = defineStore('grocy', {
   }),
   getters: {
     product_groups: (state) => {
-      return state._product_groups.map((product_group) => {
+      var groups =  state._product_groups.map((product_group) => {
         return {
           name: product_group.name,
           id: product_group.id,
@@ -18,6 +18,15 @@ export const useGrocyStore = defineStore('grocy', {
             .length
         }
       })
+      groups.push(
+        {
+          name: 'Sem grupos',
+          id: null,
+          count: state._products.filter((product) => product.product_group_id === null)
+            .length
+        }
+      )
+      return groups
     },
     products: (state) => {
       return state._products.map((product) => {
@@ -40,13 +49,19 @@ export const useGrocyStore = defineStore('grocy', {
     },
     locations: (state) => {
       return state._locations.map((location) => {
+        var stock = state._stocks
+          ? state._stocks.filter((stock) => stock.location_id === location.id)
+          : []
         return {
           name: location.name,
           id: location.id,
+          stock: stock,
+          count: stock
+            .map((stock) => stock.product_id)
+            .filter((value, index, array) => array.indexOf(value) === index).length
         }
       })
     }
-
   },
   actions: {
     fetch() {

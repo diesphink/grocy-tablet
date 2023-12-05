@@ -26,3 +26,31 @@
 .filtros .accordion-body {
   padding: 5px;
 }
+
+.filtros {
+  /* margin: 0; */
+  padding: 0;
+  /* border: solid black thin; */
+}
+
+.filtros .list-group {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.filtros .list-group a {
+  font-size: 0.8rem !important;
+  padding: 10px 5px;
+  margin: 0 !important;
+  font-weight: normal !important;
+}
+
+.filtros .badge {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.filtros .subheader:not(:first-child) {
+  margin-top: 30px;
+}
+

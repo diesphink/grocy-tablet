@@ -8,17 +8,17 @@ export const Fields = {
   Stock: 'stock'
 }
 
-export const ExpireValues = {
-  Expired: 'expired',
-  Expire7Days: '7',
-  Expire30Days: '30'
-}
+export const ExpireValues = [
+  { id: 0, name: 'Vencido' },
+  { id: 7, name: '7 dias' },
+  { id: 30, name: '30 dias' }
+]
+  
 
-export const StockValues = {
-  Present: 'present',
-  LowStock: 'low_stock',
-  Empty: 'empty'
-}
+export const StockValues = [
+  { id: 0, name: 'Com estoque' },
+  { id: 1, name: 'Baixo estoque' }
+]
 
 function _set(arr, item, value) {
   var index = arr.indexOf(value)
@@ -36,9 +36,8 @@ function _set(arr, item, value) {
 
 function _toggle(arr, value) {
   var index = arr.indexOf(value)
-  if (index >= 0) {
-    arr.splice(index, 1)
-  } else {
+  arr.splice(0, arr.length)
+  if (index < 0) {
     arr.push(value)
   }
   return arr
@@ -48,8 +47,8 @@ export const useFiltersStore = defineStore('filters', {
   state: () => ({
     product_groups: [],
     locations: [],
-    tags: [],
-    others: [StockValues.Present]
+    expires: [],
+    stocks: [StockValues.Present]
   }),
   getters: {
     filtered_product_groups: (state) => {
@@ -58,11 +57,11 @@ export const useFiltersStore = defineStore('filters', {
     filtered_locations: (state) => {
       return state.locations
     },
-    filtered_tags: (state) => {
-      return state.tags
+    filtered_expires: (state) => {
+      return state.expires
     },
-    filtered_others: (state) => {
-      return state.others
+    filtered_stocks: (state) => {
+      return state.stocks
     }
   },
   actions: {
@@ -74,14 +73,11 @@ export const useFiltersStore = defineStore('filters', {
         case Fields.Location:
           _toggle(this.locations, item.id)
           break
-        case Fields.Tag:
-          _toggle(this.tags, item)
-          break
         case Fields.Expire:
-          _toggle(this.others, item)
+          _toggle(this.expires, item)
           break
         case Fields.Stock:
-          _toggle(this.others, item)
+          _toggle(this.stocks, item)
           break
       }
     },
@@ -92,9 +88,6 @@ export const useFiltersStore = defineStore('filters', {
           break
         case Fields.Location:
           _set(this.locations, item.id, value)
-          break
-        case Fields.Tag:
-          _set(this.tags, item, value)
           break
         case Fields.Expire:
           _set(this.expire, item, value)
@@ -107,8 +100,8 @@ export const useFiltersStore = defineStore('filters', {
     clear() {
       this.product_groups = []
       this.locations = []
-      this.tags = []
-      this.others = [StockValues.Present]
+      this.expires = []
+      this.stocks = [StockValues.Present]
     },
     is_filtered(field, item) {
       switch (field) {
@@ -116,12 +109,10 @@ export const useFiltersStore = defineStore('filters', {
           return this.product_groups.includes(item.id)
         case Fields.Location:
           return this.locations.includes(item.id)
-        case Fields.Tag:
-          return this.tags.includes(item)
         case Fields.Expire:
-          return this.others.includes(item)
+          return this.expires.includes(item)
         case Fields.Stock:
-          return this.others.includes(item)
+          return this.stocks.includes(item)
       }
     }
   }
