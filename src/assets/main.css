@@ -6,7 +6,7 @@
   opacity: 0.9;
 }
 
-.quantidade {
+.produto .quantidade {
   background-color: white !important;
   border: solid rgba(0, 0, 0, 0.2) 1px !important;
   opacity: 0.9;
@@ -54,3 +54,13 @@
   margin-top: 30px;
 }
 
+.produto {
+  cursor: pointer;
+}
+
+.dialog-produto .quantidade {
+  display: inline-block;
+  font-size: 3rem;
+  vertical-align: middle;
+  margin: 0 10px;
+}
