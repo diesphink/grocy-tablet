@@ -1,5 +1,5 @@
 <script setup>
-import { SearchIcon } from 'vue-tabler-icons'
+import { BackspaceFilledIcon, CrossIcon, SearchIcon } from 'vue-tabler-icons'
 import ProductCard from './ProductCard.vue'
 import { useGrocyStore } from '../stores/grocy.js'
 import { useFiltersStore } from '../stores/filters.js'
@@ -14,7 +14,7 @@ const search_string = ref('')
 const filtered_products = computed(() => {
   var fuzzy_result = null
   var products = store.products
-  if (search_string.value && search_string.value.length > 2) {
+  if (search_string.value) {
     const options = {
       keys: ['name'],
       ignoreLocation: true
@@ -39,7 +39,7 @@ const filtered_products = computed(() => {
         visible = false
       }
     })
-    if (search_string.value && search_string.value.length > 2) {
+    if (search_string.value) {
       visible &= fuzzy_result.filter((result) => result.item.id == product.id).length > 0
     }
 
@@ -59,16 +59,23 @@ const grouped_products = computed(() => {
 </script>
 
 <template>
-  <div class="input-icon mb-3">
+  <div class="input-group">
+    <span class="input-group-text">
+      <a href="#" class="link-secondary ms-2" @click.prevent="search_string = ''">
+        <SearchIcon />
+      </a>
+    </span>
     <input
       type="text"
-      value=""
       class="form-control"
-      placeholder="Buscar..."
+      autocomplete="off"
+      placeholder="Pesquisar..."
       v-model="search_string"
     />
-    <span class="input-icon-addon">
-      <SearchIcon class="icon" style="margin-right: 15px" />
+    <span class="input-group-text" v-if="search_string">
+      <a href="#" class="link-secondary ms-2" @click.prevent="search_string = ''">
+        <BackspaceFilledIcon /> Limpar filtro
+      </a>
     </span>
   </div>
 
