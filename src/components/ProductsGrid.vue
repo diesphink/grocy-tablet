@@ -46,6 +46,16 @@ const filtered_products = computed(() => {
     return visible
   })
 })
+
+const grouped_products = computed(() => {
+  var products = filtered_products.value
+  var grouped = []
+  for (var i = 0; i < products.length; i += 6) {
+    grouped.push({ id: i, items: products.slice(i, i + 6) })
+  }
+  console.log(grouped)
+  return grouped
+})
 </script>
 
 <template>
@@ -61,7 +71,21 @@ const filtered_products = computed(() => {
       <SearchIcon class="icon" style="margin-right: 15px" />
     </span>
   </div>
-  <div class="col-sm-3 col-lg-2" v-for="product in filtered_products" :key="product.id">
-    <product-card :product="product" />
-  </div>
+
+  <DynamicScroller :items="grouped_products" :min-item-size="54" class="scroller">
+    <template v-slot="{ item, index, active }">
+      <DynamicScrollerItem
+        :item="item"
+        :active="active"
+        :size-dependencies="[item.message]"
+        :data-index="index"
+      >
+        <div class="row row-cards">
+          <div class="col-sm-4 col-lg-2" v-for="product in item.items" :key="product.id">
+            <ProductCard :product="product" :key="product.id" />
+          </div>
+        </div>
+      </DynamicScrollerItem>
+    </template>
+  </DynamicScroller>
 </template>
