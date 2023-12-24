@@ -1,12 +1,15 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useActionsStore } from '../stores/actions.js'
 import { useGrocyStore } from '../stores/grocy'
 import { MinusIcon, PlusIcon } from 'vue-tabler-icons'
 import ProductImage from './ProductImage.vue'
+import moment from 'moment'
 
 const qtd = ref(1)
 const tab = ref(0)
+const expires = ref('2024-01-01')
+
 const CONSUMIR = 0,
   ABRIR = 1,
   ADICIONAR = 2,
@@ -17,8 +20,8 @@ var grocy = useGrocyStore()
 
 function hide() {
   actions.deselect_product()
-  qtd.value = 1
 }
+
 function may_increment() {
   if (tab.value == CONSUMIR || tab.value == ABRIR)
     return qtd.value < actions.selected_product.quantity
@@ -37,8 +40,34 @@ function decrement() {
   if (may_decrement()) qtd.value--
 }
 
+async function action() {
+  if (tab.value == CONSUMIR) await grocy.consume(actions.selected_product.id, qtd.value)
+  if (tab.value == ABRIR) await grocy.open(actions.selected_product.id, qtd.value)
+  if (tab.value == ADICIONAR) await grocy.add(actions.selected_product.id, qtd.value, expires.value)
+  if (tab.value == INVENTARIO) await grocy.inventory(actions.selected_product.id, qtd.value)
+
+  hide()
+}
+
 var show = computed(() => {
   return actions.selected_product
+})
+
+watch(show, async () => {
+  if (actions.selected_product) {
+    if (tab.value == INVENTARIO) qtd.value = actions.selected_product.quantity
+    else qtd.value = 1
+    if (actions.selected_product.default_best_before_days) {
+      expires.value = moment()
+        .add(actions.selected_product.default_best_before_days, 'days')
+        .format('YYYY-MM-DD')
+    } else expires.value = ''
+  }
+})
+
+watch(tab, () => {
+  if (tab.value == INVENTARIO) qtd.value = actions.selected_product.quantity
+  else qtd.value = 1
 })
 
 var tabs = computed(() => {
@@ -47,6 +76,7 @@ var tabs = computed(() => {
       label: 'Consumir',
       color: 'blue',
       enabled:
+        !grocy.busy &&
         actions.selected_product.stock.length > 0 &&
         qtd.value > 0 &&
         qtd.value <= actions.selected_product.quantity
@@ -55,6 +85,7 @@ var tabs = computed(() => {
       label: 'Abrir',
       color: 'cyan',
       enabled:
+        !grocy.busy &&
         actions.selected_product.stock.length > 0 &&
         qtd.value > 0 &&
         qtd.value <= actions.selected_product.quantity
@@ -62,12 +93,12 @@ var tabs = computed(() => {
     {
       label: 'Adicionar',
       color: 'green',
-      enabled: true
+      enabled: !grocy.busy
     },
     {
       label: 'Inventário',
       color: 'orange',
-      enabled: true,
+      enabled: !grocy.busy,
       action_label: 'Atualizar inventário'
     }
   ]
@@ -142,7 +173,7 @@ var tabs = computed(() => {
                       class="btn btn-primary btn-pill"
                       :class="'bg-' + tabs[tab].color + '-lt'"
                       :style="{ opacity: may_decrement() ? '1' : '0.2' }"
-                      @click="decrement()"
+                      @click.prevent="decrement()"
                       ><MinusIcon height="48" />
                     </a>
                   </div>
@@ -155,7 +186,7 @@ var tabs = computed(() => {
                       class="btn btn-primary btn-pill"
                       :class="'bg-' + tabs[tab].color + '-lt'"
                       :style="{ opacity: may_increment() ? '1' : '0.2' }"
-                      @click="increment()"
+                      @click.prevent="increment()"
                       ><PlusIcon height="48" />
                     </a>
                   </div>
@@ -168,6 +199,7 @@ var tabs = computed(() => {
                   class="form-control"
                   placeholder="YYYY-MM-DD"
                   autocomplete="off"
+                  v-model="expires"
                 />
               </div>
             </div>
@@ -185,6 +217,7 @@ var tabs = computed(() => {
                   class="btn btn-primary w-100"
                   :class="[{ disabled: !tabs[tab].enabled }, 'bg-' + tabs[tab].color]"
                   data-bs-dismiss="modal"
+                  @click.prevent="action()"
                   >{{ tabs[tab].action_label || tabs[tab].label }}</a
                 >
               </div>

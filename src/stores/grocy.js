@@ -7,7 +7,8 @@ export const useGrocyStore = defineStore('grocy', {
     _products: [],
     _stocks: [],
     _locations: [],
-    _history: []
+    _history: [],
+    busy: false
   }),
   getters: {
     product_groups: (state) => {
@@ -41,7 +42,8 @@ export const useGrocyStore = defineStore('grocy', {
             const exp = moment(cur.best_before_date, 'YYYY-MM-DD')
             return acc > exp || acc == null ? exp : acc
           }, null),
-          picture_file_name: product.picture_file_name
+          picture_file_name: product.picture_file_name,
+          default_best_before_days: product.default_best_before_days
         }
       })
     },
@@ -83,11 +85,12 @@ export const useGrocyStore = defineStore('grocy', {
           amount: history.amount,
           transaction_type: history.transaction_type,
           best_before_date: history.best_before_date,
-          row_created_timestamp: moment(history.row_created_timestamp, 'YYYY-MM-DD HH:mm:SS'),
+          row_created_timestamp: moment.utc(history.row_created_timestamp, 'YYYY-MM-DD HH:mm:SS'),
           user: history.user_id,
-          note: history.note
-
-
+          note: history.note,
+          transaction_id: history.transaction_id,
+          undone: history.undone,
+          undone_timestamp: moment.utc(history.undone_timestamp, 'YYYY-MM-DD HH:mm:SS')
         }
       })
     }
@@ -95,7 +98,7 @@ export const useGrocyStore = defineStore('grocy', {
   actions: {
     fetch() {
       this.fetchProductGroups()
-      this.fetchProcuts()
+      this.fetchProducts()
       this.fetchStocks()
       this.fetchLocations()
     },
@@ -108,7 +111,7 @@ export const useGrocyStore = defineStore('grocy', {
           this._product_groups = data
         })
     },
-    fetchProcuts() {
+    fetchProducts() {
       fetch(
         'http://192.168.15.2:9283/api/objects/products?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
       )
@@ -135,16 +138,110 @@ export const useGrocyStore = defineStore('grocy', {
           this._locations = data
         })
     },
-    fetchHistory(page_size = 50, page_number = 1) {
+    fetchHistory(page_number = 1) {
+      const page_size = 50
       fetch(
-        `http://192.168.15.2:9283/api/objects/stock_log?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk&limit=${page_size}&offset=${(page_number - 1) * page_size}&order=row_created_timestamp:desc`
+        `http://192.168.15.2:9283/api/objects/stock_log?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk&limit=${page_size}&offset=${
+          (page_number - 1) * page_size
+        }&order=row_created_timestamp:desc`
       )
         .then((response) => response.json())
         .then((data) => {
           this._history = data
         })
     },
-
-
+    async consume(product_id, quantity) {
+      this.busy = true
+      try {
+        await fetch(
+          `http://192.168.15.2:9283/api/stock/products/${product_id}/consume?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
+          {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount: quantity, spoiled: false, transaction_type: 'consume' })
+          }
+        )
+      } catch (e) {
+        alert(e)
+      }
+      this.fetchStocks()
+      this.busy = false
+    },
+    async open(product_id, quantity) {
+      this.busy = true
+      try {
+        await fetch(
+          `http://192.168.15.2:9283/api/stock/products/${product_id}/open?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
+          {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ amount: quantity })
+          }
+        )
+      } catch (e) {
+        alert(e)
+      }
+      this.fetchStocks()
+      this.busy = false
+    },
+    async add(product_id, quantity, expires) {
+      this.busy = true
+      try {
+        await fetch(
+          `http://192.168.15.2:9283/api/stock/products/${product_id}/add?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
+          {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: quantity,
+              transaction_type: 'purchase',
+              best_before_date: expires
+            })
+          }
+        )
+      } catch (e) {
+        alert(e)
+      }
+      this.fetchStocks()
+      this.busy = false
+    },
+    async inventory(product_id, quantity) {
+      this.busy = true
+      try {
+        await fetch(
+          `http://192.168.15.2:9283/api/stock/products/${product_id}/inventory?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
+          {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ new_amount: quantity })
+          }
+        )
+      } catch (e) {
+        alert(e)
+      }
+      this.fetchStocks()
+      this.busy = false
+    },
+    async undo_stock_log(stock_log_id) {
+      this.busy = true
+      try {
+        await fetch(
+          `http://192.168.15.2:9283/api/stock/transactions/${stock_log_id}/undo?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
+          { method: 'POST' }
+        )
+      } catch (e) {
+        alert(e)
+      }
+      this.fetchStocks()
+      this.busy = false
+    }
   }
 })
