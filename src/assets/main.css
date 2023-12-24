@@ -64,3 +64,15 @@
   vertical-align: middle;
   margin: 0 10px;
 }
+
+.undone td {
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.undone span {
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.7rem;
+  
+}
