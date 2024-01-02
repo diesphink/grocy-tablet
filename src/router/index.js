@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ConsumeView from '../views/ConsumeView.vue'
+import ConfigView from '../views/ConfigView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,6 +9,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: ConsumeView
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: ConfigView
     },
     {
       path: '/history',

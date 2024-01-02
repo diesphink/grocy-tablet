@@ -1,5 +1,5 @@
 <script setup>
-import { BackspaceFilledIcon, CrossIcon, SearchIcon } from 'vue-tabler-icons'
+import { BackspaceFilledIcon, SearchIcon } from 'vue-tabler-icons'
 import ProductCard from './ProductCard.vue'
 import { useGrocyStore } from '../stores/grocy.js'
 import { useFiltersStore } from '../stores/filters.js'

@@ -8,6 +8,8 @@ export const useGrocyStore = defineStore('grocy', {
     _stocks: [],
     _locations: [],
     _history: [],
+    server: null,
+    api_key: null,
     busy: false
   }),
   getters: {
@@ -96,43 +98,52 @@ export const useGrocyStore = defineStore('grocy', {
     }
   },
   actions: {
+    init() {
+      this.server = localStorage.getItem('server')
+      this.api_key = localStorage.getItem('api_key')
+      if (this.server && this.api_key) this.fetch()
+    },
+    save_config(server, api_key) {
+      localStorage.setItem('server', server)
+      localStorage.setItem('api_key', api_key)
+      this.server = server
+      this.api_key = api_key
+      this.fetch()
+    },
     fetch() {
       this.fetchProductGroups()
       this.fetchProducts()
       this.fetchStocks()
       this.fetchLocations()
     },
+    genURL(path, params = {}) {
+      return `${this.server}/api/${path}?GROCY-API-KEY=${this.api_key}&${new URLSearchParams(
+        params
+      ).toString()}`
+    },
     fetchProductGroups() {
-      fetch(
-        'http://192.168.15.2:9283/api/objects/product_groups?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
-      )
+      fetch(this.genURL('objects/product_groups'))
         .then((response) => response.json())
         .then((data) => {
           this._product_groups = data
         })
     },
     fetchProducts() {
-      fetch(
-        'http://192.168.15.2:9283/api/objects/products?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
-      )
+      fetch(this.genURL('objects/products'))
         .then((response) => response.json())
         .then((data) => {
           this._products = data
         })
     },
     fetchStocks() {
-      fetch(
-        'http://192.168.15.2:9283/api/objects/stock?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
-      )
+      fetch(this.genURL('objects/stock'))
         .then((response) => response.json())
         .then((data) => {
           this._stocks = data
         })
     },
     fetchLocations() {
-      fetch(
-        'http://192.168.15.2:9283/api/objects/locations?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk'
-      )
+      fetch(this.genURL('objects/locations'))
         .then((response) => response.json())
         .then((data) => {
           this._locations = data
@@ -141,9 +152,11 @@ export const useGrocyStore = defineStore('grocy', {
     fetchHistory(page_number = 1) {
       const page_size = 50
       fetch(
-        `http://192.168.15.2:9283/api/objects/stock_log?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk&limit=${page_size}&offset=${
-          (page_number - 1) * page_size
-        }&order=row_created_timestamp:desc`
+        this.genURL('objects/stock_log', {
+          limit: page_size,
+          offset: (page_number - 1) * page_size,
+          order: 'row_created_timestamp:desc'
+        })
       )
         .then((response) => response.json())
         .then((data) => {
@@ -153,16 +166,13 @@ export const useGrocyStore = defineStore('grocy', {
     async consume(product_id, quantity) {
       this.busy = true
       try {
-        await fetch(
-          `http://192.168.15.2:9283/api/stock/products/${product_id}/consume?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
-          {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ amount: quantity, spoiled: false, transaction_type: 'consume' })
-          }
-        )
+        await fetch(this.genURL(`stock/products/${product_id}/consume`), {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ amount: quantity, spoiled: false, transaction_type: 'consume' })
+        })
       } catch (e) {
         alert(e)
       }
@@ -172,16 +182,13 @@ export const useGrocyStore = defineStore('grocy', {
     async open(product_id, quantity) {
       this.busy = true
       try {
-        await fetch(
-          `http://192.168.15.2:9283/api/stock/products/${product_id}/open?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
-          {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ amount: quantity })
-          }
-        )
+        await fetch(this.genURL(`stock/products/${product_id}/open`), {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ amount: quantity })
+        })
       } catch (e) {
         alert(e)
       }
@@ -191,20 +198,17 @@ export const useGrocyStore = defineStore('grocy', {
     async add(product_id, quantity, expires) {
       this.busy = true
       try {
-        await fetch(
-          `http://192.168.15.2:9283/api/stock/products/${product_id}/add?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
-          {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              amount: quantity,
-              transaction_type: 'purchase',
-              best_before_date: expires
-            })
-          }
-        )
+        await fetch(this.genURL(`stock/products/${product_id}/add`), {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: quantity,
+            transaction_type: 'purchase',
+            best_before_date: expires
+          })
+        })
       } catch (e) {
         alert(e)
       }
@@ -214,16 +218,13 @@ export const useGrocyStore = defineStore('grocy', {
     async inventory(product_id, quantity) {
       this.busy = true
       try {
-        await fetch(
-          `http://192.168.15.2:9283/api/stock/products/${product_id}/inventory?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
-          {
-            method: 'POST', // or 'PUT'
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ new_amount: quantity })
-          }
-        )
+        await fetch(this.genURL(`stock/products/${product_id}/inventory`), {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ new_amount: quantity })
+        })
       } catch (e) {
         alert(e)
       }
@@ -233,10 +234,7 @@ export const useGrocyStore = defineStore('grocy', {
     async undo_stock_log(stock_log_id) {
       this.busy = true
       try {
-        await fetch(
-          `http://192.168.15.2:9283/api/stock/transactions/${stock_log_id}/undo?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`,
-          { method: 'POST' }
-        )
+        await fetch(this.genURL(`stock/transactions/${stock_log_id}/undo`), { method: 'POST' })
       } catch (e) {
         alert(e)
       }

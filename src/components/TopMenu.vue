@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { HomeIcon, HistoryIcon } from 'vue-tabler-icons'
+import { HomeIcon, HistoryIcon, SettingsIcon } from 'vue-tabler-icons'
 
 const route=useRoute();
 
@@ -49,6 +49,12 @@ const path = computed(() =>route.path)
               <router-link to="/history" class="nav-link"
                 ><span class="nav-link-icon d-md-none d-lg-inline-block"><HistoryIcon /> </span>
                 <span class="nav-link-title"> Histórico </span>
+              </router-link>
+            </li>
+            <li class="nav-item" :class="{active: path == '/config'}">
+              <router-link to="/config" class="nav-link"
+                ><span class="nav-link-icon d-md-none d-lg-inline-block"><SettingsIcon /> </span>
+                <span class="nav-link-title"> Configurações </span>
               </router-link>
             </li>
           </ul>
