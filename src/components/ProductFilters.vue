@@ -2,7 +2,7 @@
   <div class="filtros">
     <div class="list-group list-group-transparent">
       <!-- ## LOCAIS ## -->
-      <h4 class="subheader"><map-pin-filled-icon class="nav-link-icon" /> Locais</h4>
+      <h4 class="subheader"><map-pin-filled-icon class="nav-link-icon" /> {{ $t('locations') }}</h4>
       <a
         href="#"
         class="list-group-item list-group-item-action d-flex align-items-center"
@@ -17,7 +17,7 @@
       >
 
       <!-- ## GRUPOS ## -->
-      <h4 class="subheader"><category-icon class="nav-link-icon" /> Grupos</h4>
+      <h4 class="subheader"><category-icon class="nav-link-icon" /> {{ $t('groups') }}</h4>
       <a
         href="#"
         class="list-group-item list-group-item-action d-flex align-items-center"
@@ -32,7 +32,7 @@
       >
 
       <!-- ## Validade ## -->
-      <h4 class="subheader"><calendar-off-icon class="nav-link-icon" />Validade</h4>
+      <h4 class="subheader"><calendar-off-icon class="nav-link-icon" />{{ $t('expiration') }}</h4>
       <a
         href="#"
         class="list-group-item list-group-item-action d-flex align-items-center"
@@ -63,7 +63,7 @@
       > -->
 
       <!-- ## Stock ## -->
-      <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> Quantidade</h4>
+      <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> {{ $t('quantity') }}</h4>
       <a
         href="#"
         class="list-group-item list-group-item-action d-flex align-items-center"

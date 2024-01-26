@@ -5,6 +5,7 @@ import { useGrocyStore } from '../stores/grocy'
 import { MinusIcon, PlusIcon } from 'vue-tabler-icons'
 import ProductImage from './ProductImage.vue'
 import moment from 'moment'
+import { useI18n } from 'vue-i18n'
 
 const qtd = ref(1)
 const tab = ref(0)
@@ -17,6 +18,7 @@ const CONSUMIR = 0,
 
 var actions = useActionsStore()
 var grocy = useGrocyStore()
+const { t } = useI18n()
 
 function hide() {
   actions.deselect_product()
@@ -73,7 +75,7 @@ watch(tab, () => {
 var tabs = computed(() => {
   return [
     {
-      label: 'Consumir',
+      label: t('consume'),
       color: 'blue',
       enabled:
         !grocy.busy &&
@@ -82,7 +84,7 @@ var tabs = computed(() => {
         qtd.value <= actions.selected_product.quantity
     },
     {
-      label: 'Abrir',
+      label: t('open'),
       color: 'cyan',
       enabled:
         !grocy.busy &&
@@ -91,15 +93,15 @@ var tabs = computed(() => {
         qtd.value <= actions.selected_product.quantity
     },
     {
-      label: 'Adicionar',
+      label: t('add'),
       color: 'green',
       enabled: !grocy.busy
     },
     {
-      label: 'Inventário',
+      label: t('inventory'),
       color: 'orange',
       enabled: !grocy.busy,
-      action_label: 'Atualizar inventário'
+      action_label: t('update-stock')
     }
   ]
 })
@@ -127,15 +129,15 @@ var tabs = computed(() => {
               <table class="table card-table table-vcenter text-nowrap datatable">
                 <thead>
                   <tr>
-                    <th class="w-auto">Local</th>
-                    <th class="w-auto">Qtd</th>
-                    <th class="w-auto">Validade</th>
+                    <th class="w-auto">{{ $t('location') }}</th>
+                    <th class="w-auto">{{ $t('qty') }}</th>
+                    <th class="w-auto">{{ $t('expiration') }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="stock in actions.selected_product.stock" :key="stock.id">
                     <td class="text-secondary">{{ grocy.locationById[stock.location_id].name }}</td>
-                    <td>{{ stock.amount }} {{ stock.open == 1 ? ' aberto' : '' }}</td>
+                    <td>{{ stock.amount }} {{ stock.open == 1 ? ' ' + $t('opened') : '' }}</td>
                     <td class="text-secondary">{{ stock.best_before_date }}</td>
                   </tr>
                 </tbody>
@@ -143,7 +145,7 @@ var tabs = computed(() => {
             </div>
           </div>
           <div class="card m-2" v-else>
-            <div class="card-body text-center text-secondary">Produto sem estoque</div>
+            <div class="card-body text-center text-secondary">{{ $t('product-out-of-stock') }}</div>
           </div>
 
           <div class="card m-2">
@@ -193,7 +195,7 @@ var tabs = computed(() => {
                 </div>
               </div>
               <div class="input-group mt-4" v-if="tab == ADICIONAR">
-                <span class="input-group-text"> Validade </span>
+                <span class="input-group-text"> {{ $t('expiration') }} </span>
                 <input
                   type="text"
                   class="form-control"
@@ -209,7 +211,7 @@ var tabs = computed(() => {
           <div class="w-100">
             <div class="row">
               <div class="col">
-                <a href="#" class="btn w-100" @click.prevent="hide()">Cancelar</a>
+                <a href="#" class="btn w-100" @click.prevent="hide()">{{ $t('cancel') }}</a>
               </div>
               <div class="col">
                 <a

@@ -18,7 +18,7 @@ const path = computed(() =>route.path)
         data-bs-target="#navbar-menu"
         aria-controls="navbar-menu"
         aria-expanded="false"
-        aria-label="Toggle navigation"
+        :aria-label="$t('toggle-navigation')"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -28,7 +28,7 @@ const path = computed(() =>route.path)
             src="../assets/grocy_logo.svg"
             width="110"
             height="32"
-            alt="Grocy"
+            :alt="$t('grocy')"
             class="navbar-brand-image"
           />
         </a>
@@ -42,19 +42,19 @@ const path = computed(() =>route.path)
             <li class="nav-item" :class="{active: path == '/'}">
               <router-link to="/" class="nav-link"
                 ><span class="nav-link-icon d-md-none d-lg-inline-block"><HomeIcon /> </span>
-                <span class="nav-link-title"> Início </span>
+                <span class="nav-link-title"> {{ $t('home') }} </span>
               </router-link>
             </li>
             <li class="nav-item" :class="{active: path == '/history'}">
               <router-link to="/history" class="nav-link"
                 ><span class="nav-link-icon d-md-none d-lg-inline-block"><HistoryIcon /> </span>
-                <span class="nav-link-title"> Histórico </span>
+                <span class="nav-link-title"> {{ $t('history') }} </span>
               </router-link>
             </li>
             <li class="nav-item" :class="{active: path == '/config'}">
               <router-link to="/config" class="nav-link"
                 ><span class="nav-link-icon d-md-none d-lg-inline-block"><SettingsIcon /> </span>
-                <span class="nav-link-title"> Configurações </span>
+                <span class="nav-link-title"> {{ $t('settings') }} </span>
               </router-link>
             </li>
           </ul>

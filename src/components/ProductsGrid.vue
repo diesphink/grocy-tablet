@@ -53,7 +53,6 @@ const grouped_products = computed(() => {
   for (var i = 0; i < products.length; i += 6) {
     grouped.push({ id: i, items: products.slice(i, i + 6) })
   }
-  console.log(grouped)
   return grouped
 })
 </script>
@@ -69,12 +68,12 @@ const grouped_products = computed(() => {
       type="text"
       class="form-control"
       autocomplete="off"
-      placeholder="Pesquisar..."
+      :placeholder="$t('search')"
       v-model="search_string"
     />
     <span class="input-group-text" v-if="search_string">
       <a href="#" class="link-secondary ms-2" @click.prevent="search_string = ''">
-        <BackspaceFilledIcon /> Limpar filtro
+        <BackspaceFilledIcon /> {{ $t('clear-filter') }}
       </a>
     </span>
   </div>

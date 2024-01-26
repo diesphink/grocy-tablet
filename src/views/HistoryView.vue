@@ -28,7 +28,7 @@ async function undo(id) {
 }
 
 function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 </script>
 
@@ -36,20 +36,20 @@ function capitalize(str) {
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Histórico</h3>
+        <h3 class="card-title">{{ $t('history') }}</h3>
       </div>
 
       <div class="table-responsive">
         <table class="table card-table table-vcenter text-nowrap datatable">
           <thead>
             <tr>
-              <th>Produto</th>
-              <th>Quantidade</th>
-              <th>Data/Hora</th>
-              <th>Tipo</th>
-              <th>Local</th>
-              <th>Notas</th>
-              <th>Ações</th>
+              <th>{{ $t('product') }}</th>
+              <th>{{ $t('quantity') }}</th>
+              <th>{{ $t('date-time') }}</th>
+              <th>{{ $t('type') }}</th>
+              <th>{{ $t('location') }}</th>
+              <th>{{ $t('notes') }}</th>
+              <th>{{ $t('actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -60,7 +60,11 @@ function capitalize(str) {
               </td>
               <td>
                 {{ capitalize(log.row_created_timestamp.fromNow()) }}
-                <div v-if="log.undone"><span class="text-danger">(desfeito {{ log.undone_timestamp.fromNow()  }})</span> </div>
+                <div v-if="log.undone">
+                  <span class="text-danger">{{
+                    $t('undone-at', [log.undone_timestamp.fromNow()])
+                  }}</span>
+                </div>
               </td>
               <td>{{ log.transaction_type }}</td>
               <td>{{ log.location.name }}</td>
@@ -72,7 +76,7 @@ function capitalize(str) {
                   @click.prevent="undo(log.transaction_id)"
                   v-if="!log.undone"
                 >
-                  <ArrowBackUpIcon class="icon" /> Desfazer
+                  <ArrowBackUpIcon class="icon" /> {{ $t('undo') }}
                 </a>
               </td>
             </tr>
@@ -80,10 +84,15 @@ function capitalize(str) {
         </table>
       </div>
       <div class="card-footer d-flex align-items-center">
-        <p class="m-0 text-secondary">
-          Exibindo de <span>{{ (page - 1) * 50 + 1 }}</span> a
-          <span>{{ (page - 1) * 50 + store.history.length }}</span>
-        </p>
+        <p
+          class="m-0 text-secondary"
+          v-html="
+            $t('showing-from-to', {
+              from: (page - 1) * 50 + 1,
+              to: (page - 1) * 50 + store.history.length
+            })
+          "
+        ></p>
         <ul class="pagination m-0 ms-auto">
           <li class="page-item" :class="{ disabled: page == 1 }">
             <a
