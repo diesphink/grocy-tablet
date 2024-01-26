@@ -9,15 +9,15 @@ export const Fields = {
 }
 
 export const ExpireValues = [
-  { id: 0, name: 'Vencido' },
-  { id: 7, name: '7 dias' },
-  { id: 30, name: '30 dias' }
+  { id: 0, name: 'expired' },
+  { id: 7, name: 'n-days' },
+  { id: 30, name: 'n-days' }
 ]
   
 
 export const StockValues = [
-  { id: 0, name: 'Com estoque' },
-  { id: 1, name: 'Baixo estoque' }
+  { id: 0, name: 'positive' },
+  { id: 1, name: 'below-minimum' }
 ]
 
 function _set(arr, item, value) {
@@ -48,7 +48,7 @@ export const useFiltersStore = defineStore('filters', {
     product_groups: [],
     locations: [],
     expires: [],
-    stocks: [StockValues.Present]
+    stocks: [0]
   }),
   getters: {
     filtered_product_groups: (state) => {
@@ -93,7 +93,7 @@ export const useFiltersStore = defineStore('filters', {
           _set(this.expire, item, value)
           break
         case Fields.Stock:
-          _set(this.stock, item, value)
+          _set(this.stocks, item, value)
           break
       }
     },

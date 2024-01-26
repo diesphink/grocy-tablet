@@ -43,7 +43,7 @@
           active: filters.is_filtered(Fields.Expire, vl.id),
           'bg-blue-lt': filters.is_filtered(Fields.Expire, vl.id)
         }"
-        >{{ vl.name }}</a
+        >{{ $t(vl.name, [vl.id]) }}</a
       >
       <!-- <a
         href="#"
@@ -63,13 +63,13 @@
       > -->
 
       <!-- ## Stock ## -->
-      <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> {{ $t('quantity') }}</h4>
+      <!-- <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> {{ $t('quantity') }}</h4>
       <a
         href="#"
         class="list-group-item list-group-item-action d-flex align-items-center"
         v-for="(key, value) in {
-          Positivo: StockValues.Present,
-          'Abaixo do mínimo': StockValues.LowStock
+          'positive': StockValues.Present,
+          'below-minimum': StockValues.LowStock
         }"
         :key="key"
         @click.prevent="filters.toggle(Fields.Stock, key)"
@@ -77,8 +77,22 @@
           active: filters.is_filtered(Fields.Stock, key),
           'bg-blue-lt': filters.is_filtered(Fields.Stock, key)
         }"
-        >{{ value }}</a
+        >{{ $t(value) }}</a
+      > -->
+
+      <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> {{ $t('quantity') }}</h4>
+      <a
+        href="#"
+        class="list-group-item list-group-item-action d-flex align-items-center"
+        v-for="vs in StockValues" :key="vs.id"
+        @click.prevent="filters.toggle(Fields.Stock, vs.id)"
+        :class="{
+          active: filters.is_filtered(Fields.Stock, vs.id),
+          'bg-blue-lt': filters.is_filtered(Fields.Stock, vs.id)
+        }"
+        >{{ $t(vs.name) }}</a
       >
+
     </div>
   </div>
 </template>

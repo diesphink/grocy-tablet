@@ -36,5 +36,10 @@
   "showing-from-to": "Displaying from <span>{from}</span> to <span>{to}</span>",
   "type": "Type",
   "undo": "Undo",
-  "language": "Language"
+  "language": "Language",
+  "expired": "Expired",
+  "n-days": "{0} days",
+  "positive": "Positive",
+  "below-minimum": "Below minimum"
+
 }

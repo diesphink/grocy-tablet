@@ -36,5 +36,9 @@
   "showing-from-to": "Exibindo de <span>{from}</span> até <span>{to}</span>",
   "undo": "Desfazer",
   "undone-at": "(desfeito {0})",
-  "language": "Idioma"
+  "language": "Idioma",
+  "expired": "Vencido",
+  "n-days": "{0} dias",
+  "positive": "Positivo",
+  "below-minimum": "Abaixo do mínimo"
 }
