@@ -1,6 +1,12 @@
-# grocy-tablet
+# Grocy - Tablet
 
-This template should help get you started developing with Vue 3 in Vite.
+Tablet interface for grocy
+
+<p align="center">
+  <img src="https://github.com/diesphink/grocy-tablet/blob/master/image.png?raw=true" alt="Grocy Tablet screenshot"/>
+</p>
+
+
 
 ## Recommended IDE Setup
 
