@@ -1,13 +1,16 @@
 {
   "name": "grocy-tablet",
-  "version": "0.0.0",
+  "homepage": "https://diesphink.github.io/grocy-tablet/",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "predeploy": "vite build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@tabler/core": "^1.0.0-beta20",
@@ -27,6 +30,7 @@
     "@vue/eslint-config-prettier": "^8.0.0",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
+    "gh-pages": "^6.1.1",
     "prettier": "^3.0.3",
     "vite": "^4.4.11"
   }
