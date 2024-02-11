@@ -42,6 +42,13 @@ const filtered_products = computed(() => {
     if (search_string.value) {
       visible &= fuzzy_result.filter((result) => result.item.id == product.id).length > 0
     }
+    if (filters.filtered_hierarchies.length == 1) {
+      if (filters.filtered_hierarchies[0] == 0) {
+        visible &= product.parent_product_id == null
+      } else {
+        visible &= product.parent_product_id != null
+      }
+    }
 
     return visible
   })

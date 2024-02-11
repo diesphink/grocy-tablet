@@ -93,13 +93,27 @@
         >{{ $t(vs.name) }}</a
       >
 
+      <h4 class="subheader"><box-seam-icon class="nav-link-icon" /> {{ $t('hierarchy') }}</h4>
+      <a
+        href="#"
+        class="list-group-item list-group-item-action d-flex align-items-center"
+        v-for="hv in HierarchyValues" :key="hv.id"
+        @click.prevent="filters.toggle(Fields.Hierarchy, hv.id)"
+        :class="{
+          active: filters.is_filtered(Fields.Hierarchy, hv.id),
+          'bg-blue-lt': filters.is_filtered(Fields.Hierarchy, hv.id)
+        }"
+        >{{ $t(hv.name) }}</a
+      >
+
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { useGrocyStore } from '../stores/grocy.js'
-import { useFiltersStore, Fields, ExpireValues, StockValues } from '../stores/filters.js'
+import { useFiltersStore, Fields, ExpireValues, StockValues, HierarchyValues } from '../stores/filters.js'
 import { CategoryIcon, MapPinFilledIcon, CalendarOffIcon, BoxSeamIcon } from 'vue-tabler-icons'
 const store = useGrocyStore()
 const filters = useFiltersStore()

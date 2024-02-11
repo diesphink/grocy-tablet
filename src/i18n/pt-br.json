@@ -40,5 +40,8 @@
   "expired": "Vencido",
   "n-days": "{0} dias",
   "positive": "Positivo",
-  "below-minimum": "Abaixo do mínimo"
+  "below-minimum": "Abaixo do mínimo",
+  "hierarchy": "Hierarquia",
+  "parents": "Pais",
+  "children": "Filhos"
 }

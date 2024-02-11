@@ -40,6 +40,8 @@
   "expired": "Expired",
   "n-days": "{0} days",
   "positive": "Positive",
-  "below-minimum": "Below minimum"
-
+  "below-minimum": "Below minimum",
+  "children": "Children",
+  "hierarchy": "Hierarchy",
+  "parents": "Parents"
 }

@@ -5,7 +5,8 @@ export const Fields = {
   Location: 'location',
   Tag: 'tag',
   Expire: 'expire',
-  Stock: 'stock'
+  Stock: 'stock',
+  Hierarchy: 'hierarchy'
 }
 
 export const ExpireValues = [
@@ -13,11 +14,15 @@ export const ExpireValues = [
   { id: 7, name: 'n-days' },
   { id: 30, name: 'n-days' }
 ]
-  
 
 export const StockValues = [
   { id: 0, name: 'positive' },
   { id: 1, name: 'below-minimum' }
+]
+
+export const HierarchyValues = [
+  { id: 0, name: 'parents' },
+  { id: 1, name: 'children' }
 ]
 
 function _set(arr, item, value) {
@@ -48,7 +53,8 @@ export const useFiltersStore = defineStore('filters', {
     product_groups: [],
     locations: [],
     expires: [],
-    stocks: [0]
+    stocks: [0],
+    hierarchies: [0]
   }),
   getters: {
     filtered_product_groups: (state) => {
@@ -62,6 +68,9 @@ export const useFiltersStore = defineStore('filters', {
     },
     filtered_stocks: (state) => {
       return state.stocks
+    },
+    filtered_hierarchies: (state) => {
+      return state.hierarchies
     }
   },
   actions: {
@@ -79,6 +88,9 @@ export const useFiltersStore = defineStore('filters', {
         case Fields.Stock:
           _toggle(this.stocks, item)
           break
+        case Fields.Hierarchy:
+          _toggle(this.hierarchies, item)
+          break
       }
     },
     set(field, item, value) {
@@ -95,6 +107,9 @@ export const useFiltersStore = defineStore('filters', {
         case Fields.Stock:
           _set(this.stocks, item, value)
           break
+        case Fields.Hierarchy:
+          _set(this.hierarchies, item, value)
+          break
       }
     },
     clear() {
@@ -102,6 +117,7 @@ export const useFiltersStore = defineStore('filters', {
       this.locations = []
       this.expires = []
       this.stocks = [StockValues.Present]
+      this.hierarchies = [HierarchyValues.Parents]
     },
     is_filtered(field, item) {
       switch (field) {
@@ -113,6 +129,8 @@ export const useFiltersStore = defineStore('filters', {
           return this.expires.includes(item)
         case Fields.Stock:
           return this.stocks.includes(item)
+        case Fields.Hierarchy:
+          return this.hierarchies.includes(item)
       }
     }
   }

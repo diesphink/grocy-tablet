@@ -45,7 +45,8 @@ export const useGrocyStore = defineStore('grocy', {
             return acc > exp || acc == null ? exp : acc
           }, null),
           picture_file_name: product.picture_file_name,
-          default_best_before_days: product.default_best_before_days
+          default_best_before_days: product.default_best_before_days,
+          parent_product_id: product.parent_product_id
         }
       })
     },
