@@ -6,6 +6,7 @@ import { MinusIcon, PlusIcon } from 'vue-tabler-icons'
 import ProductImage from './ProductImage.vue'
 import moment from 'moment'
 import { useI18n } from 'vue-i18n'
+import { vOnLongPress } from '@vueuse/components'
 
 const qtd = ref(1)
 const tab = ref(0)
@@ -105,6 +106,13 @@ var tabs = computed(() => {
     }
   ]
 })
+
+function onLongPressAdd() {
+  if (actions.selected_product) qtd.value = actions.selected_product.quantity
+}
+function onLongPressSubtract() {
+  if (actions.selected_product) qtd.value = 1
+}
 </script>
 
 <template>
@@ -176,6 +184,7 @@ var tabs = computed(() => {
                       :class="'bg-' + tabs[tab].color + '-lt'"
                       :style="{ opacity: may_decrement() ? '1' : '0.2' }"
                       @click.prevent="decrement()"
+                      v-on-long-press.prevent="onLongPressSubtract"
                       ><MinusIcon height="48" />
                     </a>
                   </div>
@@ -189,6 +198,7 @@ var tabs = computed(() => {
                       :class="'bg-' + tabs[tab].color + '-lt'"
                       :style="{ opacity: may_increment() ? '1' : '0.2' }"
                       @click.prevent="increment()"
+                      v-on-long-press.prevent="onLongPressAdd"
                       ><PlusIcon height="48" />
                     </a>
                   </div>
