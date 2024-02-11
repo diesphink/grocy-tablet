@@ -99,6 +99,18 @@ function save() {
               <label for="btn-radio-toolbar-2" class="btn btn-icon">
                 <span class="flag flag-xs flag-country-br"></span>
               </label>
+              <input
+                type="radio"
+                class="btn-check"
+                name="btn-radio-toolbar"
+                id="btn-radio-toolbar-3"
+                autocomplete="off"
+                :checked="$i18n.locale == 'kokr'"
+                @click="$i18n.locale = 'kokr'"
+              />
+              <label for="btn-radio-toolbar-3" class="btn btn-icon">
+                <span class="flag flag-xs flag-country-kr"></span>
+              </label>
             </div>
           </div>
 
