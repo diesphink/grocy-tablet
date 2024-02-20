@@ -34,19 +34,26 @@ export const useGrocyStore = defineStore('grocy', {
         var stock = state._stocks
           ? state._stocks.filter((stock) => stock.product_id === product.id)
           : []
+        var children = state._products.filter((child) => child.parent_product_id === product.id)
+        var children_stock = state._stocks
+          ? state._stocks.filter((stock) =>
+              children.map((child) => child.id).includes(stock.product_id)
+            )
+          : []
         return {
           name: product.name,
           id: product.id,
           product_group_id: product.product_group_id,
           stock: stock,
-          quantity: stock.reduce((acc, cur) => acc + cur.amount, 0),
+          quantity: stock.reduce((acc, cur) => acc + cur.amount, 0) + children_stock.reduce((acc, cur) => acc + cur.amount, 0),
           expire: stock.reduce((acc, cur) => {
             const exp = moment(cur.best_before_date, 'YYYY-MM-DD')
             return acc > exp || acc == null ? exp : acc
           }, null),
           picture_file_name: product.picture_file_name,
           default_best_before_days: product.default_best_before_days,
-          parent_product_id: product.parent_product_id
+          parent_product_id: product.parent_product_id,
+          children: children.map((child) => child.id)
         }
       })
     },
