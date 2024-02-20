@@ -1,17 +1,29 @@
 <script setup>
 import { computed } from 'vue'
+import { useGrocyStore } from '../stores/grocy'
+import { ref } from 'vue';
 
 const props = defineProps(['product', 'width', 'height'])
+const grocy = useGrocyStore()
+
+const server = ref(grocy.server)
+const api_key = ref(grocy.api_key)
+
 
 const prod_image = computed(() => {
+  if (!server.value) return ''
+
+  var base_url = server.value
+
+  if (!base_url.endsWith('/')) base_url += '/'
+  base_url += 'api/files/productpictures'
+
   if (props.product.picture_file_name == null) {
-    return `http://192.168.15.2:9283/api/files/productpictures/${btoa(
-      'zckt669zxvh37ydjp9qffvgkml9oy5h0b71.jpg'
-    )}?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`
+    return '/no-image.jpg'
   } else {
-    return `http://192.168.15.2:9283/api/files/productpictures/${btoa(
-      props.product.picture_file_name
-    )}?GROCY-API-KEY=VHJVX7l8W0d4jv9PsQl3BqryjvF6f4KccbiLLYVlGbYrFpQ5wk`
+    return `${base_url}/${btoa(props.product.picture_file_name)}?GROCY-API-KEY=${
+      api_key.value
+    }`
   }
 })
 </script>
