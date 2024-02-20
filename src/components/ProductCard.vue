@@ -2,6 +2,7 @@
 import { inject, computed } from 'vue'
 import { useActionsStore } from '../stores/actions'
 import ProductImage from './ProductImage.vue'
+import ProductStock from './ProductStock.vue'
 
 const moment = inject('moment')
 const props = defineProps(['product'])
@@ -21,7 +22,7 @@ const expiring = computed(() => daysToExpire.value < 30 && daysToExpire.value >=
 
 <template>
   <div class="card card-sm produto" @click.prevent="actions.select_product(prod)">
-    <product-image :product="prod" width="300px" height="80px"/>
+    <product-image :product="prod" width="300px" height="80px" />
     <div class="card-status-top bg-red" v-if="expired"></div>
     <div class="card-status-top bg-orange-lt" v-if="expiring"></div>
     <div class="card-status-top bg-orange" v-if="exp_now"></div>
@@ -32,7 +33,7 @@ const expiring = computed(() => daysToExpire.value < 30 && daysToExpire.value >=
         </div>
       </div>
     </div>
-    <div class="ribbon ribbon-end quantidade">{{ prod.quantity }}</div>
+    <div class="ribbon ribbon-end quantidade"><product-stock :product="prod" /></div>
     <div class="ribbon validade bg-red" v-if="expired">{{ prod.expire.fromNow() }}!</div>
     <div class="ribbon validade bg-orange-lt" v-if="expiring">
       {{ prod.expire.fromNow() }}

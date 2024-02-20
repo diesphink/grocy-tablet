@@ -14,6 +14,17 @@
   margin-top: -5px;
 }
 
+.produto .stock .opened {
+  color: rgba(0, 0, 0, 0.7);
+  margin-left: 5px;
+}
+
+.produto .stock svg {
+  width: 16px;
+  height: 16px;
+  margin-bottom: -3px;
+}
+
 .produto .card-body {
   font-size: 0.8rem;
   padding: 5px 10px !important;
@@ -74,5 +85,4 @@
   text-decoration: none;
   display: inline-block;
   font-size: 0.7rem;
-  
 }

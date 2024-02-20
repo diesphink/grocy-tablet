@@ -40,12 +40,21 @@ export const useGrocyStore = defineStore('grocy', {
               children.map((child) => child.id).includes(stock.product_id)
             )
           : []
+
+        var qty_unopened = stock.reduce((acc, cur) => (acc + !cur.open ? cur.amount : 0), 0)
+        qty_unopened += children_stock.reduce((acc, cur) => (acc + !cur.open ? cur.amount : 0), 0)
+
+        var qty_opened = stock.reduce((acc, cur) => (acc + cur.open ? cur.amount : 0), 0)
+        qty_opened += children_stock.reduce((acc, cur) => (acc + cur.open ? cur.amount : 0), 0)
+
         return {
           name: product.name,
           id: product.id,
           product_group_id: product.product_group_id,
           stock: stock,
-          quantity: stock.reduce((acc, cur) => acc + cur.amount, 0) + children_stock.reduce((acc, cur) => acc + cur.amount, 0),
+          quantity_unopened: qty_unopened,
+          quantity_opened: qty_opened,
+          quantity: qty_unopened + qty_opened,
           expire: stock.reduce((acc, cur) => {
             const exp = moment(cur.best_before_date, 'YYYY-MM-DD')
             return acc > exp || acc == null ? exp : acc
