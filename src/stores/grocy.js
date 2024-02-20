@@ -23,7 +23,7 @@ export const useGrocyStore = defineStore('grocy', {
         }
       })
       groups.push({
-        name: 'Sem grupos',
+        name: null,
         id: null,
         count: state._products.filter((product) => product.product_group_id === null).length
       })

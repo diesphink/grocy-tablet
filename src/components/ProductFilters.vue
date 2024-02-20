@@ -28,7 +28,7 @@
           active: filters.is_filtered(Fields.ProductGroup, pg),
           'bg-blue-lt': filters.is_filtered(Fields.ProductGroup, pg)
         }"
-        >{{ pg.name }}<span class="badge text-primary-fg ms-auto">{{ pg.count }}</span></a
+        >{{ pg.name || $t('no-groups' ) }}<span class="badge text-primary-fg ms-auto">{{ pg.count }}</span></a
       >
 
       <!-- ## Validade ## -->

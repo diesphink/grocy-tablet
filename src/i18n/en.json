@@ -43,5 +43,6 @@
   "below-minimum": "Below minimum",
   "children": "Children",
   "hierarchy": "Hierarchy",
-  "parents": "Parents"
+  "parents": "Parents",
+  "no-groups": "No groups"
 }

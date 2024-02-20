@@ -43,5 +43,6 @@
   "below-minimum": "최소재고 미달",
   "children": "어린이들",
   "hierarchy": "계층",
-  "parents": "부모"
+  "parents": "부모",
+  "no-groups": "그룹 없음"
 }
