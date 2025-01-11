@@ -41,11 +41,11 @@ export const useGrocyStore = defineStore('grocy', {
             )
           : []
 
-        var qty_unopened = stock.reduce((acc, cur) => (acc + !cur.open ? cur.amount : 0), 0)
-        qty_unopened += children_stock.reduce((acc, cur) => (acc + !cur.open ? cur.amount : 0), 0)
+        var qty_unopened = stock.reduce((acc, cur) => (acc + (!cur.open ? cur.amount : 0)), 0)
+        qty_unopened += children_stock.reduce((acc, cur) => (acc + (!cur.open ? cur.amount : 0)), 0)
 
-        var qty_opened = stock.reduce((acc, cur) => (acc + cur.open ? cur.amount : 0), 0)
-        qty_opened += children_stock.reduce((acc, cur) => (acc + cur.open ? cur.amount : 0), 0)
+        var qty_opened = stock.reduce((acc, cur) => (acc + (cur.open ? cur.amount : 0)), 0)
+        qty_opened += children_stock.reduce((acc, cur) => (acc + (cur.open ? cur.amount : 0)), 0)
 
         return {
           name: product.name,
