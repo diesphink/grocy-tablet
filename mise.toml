@@ -1,0 +1,5 @@
+[env]
+VSCODE_PROFILES = "common vue"
+
+[tools]
+node = "latest"
